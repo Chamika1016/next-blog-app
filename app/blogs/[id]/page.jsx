@@ -1,20 +1,20 @@
 "use client";
 import { assets, blog_data } from "@/assets/assets";
 import Footer from "@/components/Footer";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const Page = ({ params }) => {
   const [data, setData] = useState(null);
-  const fetchBlogData = () => {
-    for (let i = 0; i < blog_data.length; i++) {
-      if (Number(params.id) === blog_data[i].id) {
-        setData(blog_data[i]);
-        console.log(blog_data[i]);
-        break;
-      }
-    }
+  const fetchBlogData = async () => {
+    const response = await axios.get("/api/blog", {
+      params: {
+        id: params.id,
+      },
+    });
+    setData(response.data);
   };
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Page = ({ params }) => {
             {data.title}
           </h1>
           <Image
-            src={data.author_img}
+            src={data.authorImg}
             width={60}
             height={60}
             alt=""
